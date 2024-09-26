@@ -4,6 +4,8 @@ const quantidadeMaquinasLabel = document.getElementById("quantidade-maquinas")
 const notificacaoFuncionario = document.getElementById("container-notifications")
 let id = 0
 
+
+
 quantidadeMaquinasLabel.innerText = `0 Maquinas`
 const buildElement = (machine) =>{
 
@@ -11,14 +13,30 @@ const buildElement = (machine) =>{
 
     const status = document.createElement("h2")
 
+    function yellow(){
+        divContainerMachine.style.backgroundColor = '#F7FAD0';
+        divContainerMachine.style.width = '25%';
+        divContainerMachine.style.textAlign = 'center'; 
+        divContainerMachine.style.borderRadius = '0.5rem';
+        divContainerMachine.style.boxShadow = '7px 7px 10px 0px rgba(0, 0, 0, 0.25)';
+    }
+
     status.classList.add("mt-6")
     status.classList.add("mb-10")
     status.classList.add("text-xl")
 
-    
-    
     if(machine.temperatura > 100 && machine.umidade > 70){
         status.innerText = "SUPERAQUECIDA e MOLHADA"
+        status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-red")
+    }
+    else if(machine.temperatura > 100 && machine.umidade > 50){
+        status.innerText = "SUPERAQUECIDA e UMIDA"
+        status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-red")
+    }
+    else if(machine.temperatura > 70 && machine.umidade > 70){
+        status.innerText = "AQUECIDA e MOLHADA"
         status.classList.add("text-red-custom") 
         divContainerMachine.classList.add("machine-container-red")
     }
@@ -33,22 +51,22 @@ const buildElement = (machine) =>{
         divContainerMachine.classList.add("machine-container-red") 
     }
     else if(machine.temperatura > 70 && machine.umidade > 50){
-        status.innerText = "AQUECIDA e MOLHADINHA"
+        status.innerText = "AQUECIDA e UMIDA"
         status.classList.add("text-red-custom") 
-        divContainerMachine.classList.add("machine-container-yellow")
+        yellow()
     }
     else if(machine.temperatura > 70){
-        status.innerText = "AQUECiDA"
+        status.innerText = "AQUECIDA"
         status.classList.add("text-red-custom") 
-        divContainerMachine.classList.add("machine-container-yellow")
+        yellow()
     }
     else if(machine.umidade > 50){
-        status.innerText = "MOLHADINHA"
+        status.innerText = "UMIDA"
         status.classList.add("text-red-custom") 
-        divContainerMachine.classList.add("machine-container-yellow")
+        yellow()
     }
 
-    else{
+    else{   
         status.innerText = "NORMAL"
         divContainerMachine.classList.add("machine-container-green")
     }
@@ -70,7 +88,6 @@ const buildElement = (machine) =>{
     divContainerStatus.classList.add("mb-24")
     
     const estado = document.createElement("p");
-
 
     estado.classList.add("text-xl")
 
@@ -94,7 +111,6 @@ const buildElement = (machine) =>{
 
     divContainerStatus.appendChild(umidadeText)
     
-
     divContainerMachine.appendChild(divContainerStatus)
     
     return divContainerMachine;
@@ -105,25 +121,66 @@ const idGenerator = () => {
         return id;
 }
 
-class Funcionario{
-
-    constructor(nome){
-        this.nome = nome
-        this.notificacoes = []
+class Funcionario {
+    constructor(nome) {
+        this.nome = nome;
+        this.notificacoes = [];
     }
 
-    update(id){
-       const text = document.createElement("p")
-       text.innerText = `A maquina de ${id} está superaquecida`
-       text.classList.add("border","text-xl","border-red-500","p-4","rounded-md")
-       this.notificacoes.push(text)
-       notificacaoFuncionario.appendChild(text)
+    update(id, state) {
+        const notificationContainer = document.createElement("div");
+        notificationContainer.classList.add(
+            "bg-red-100",
+            "border-l-4",
+            "border-red-500",
+            "p-4",
+            "mb-2",
+            "rounded-lg",
+            "shadow-md",
+            "transition-transform",
+            "duration-300",
+            "transform",
+            "translate-x-0"
+        );
+
+        const message = document.createElement("p");
+        let messageText;
+
+        switch (state) {
+            case "superaquecida e molhada":
+                messageText = `A máquina de ${id} está superaquecida e molhada!`
+                break
+            case "superaquecida":
+                messageText = `A máquina de ${id} está superaquecida!`
+                break
+            case "aquecida":
+                messageText = `A máquina de ${id} está aquecida!`
+                break
+            case "umida":
+                messageText = `A máquina de ${id} está úmida!`
+                break
+            case "molhada":
+                messageText = `A máquina de ${id} está molhada!`
+                break
+        }
+
+        message.innerText = messageText;
+        message.classList.add(
+            "text-xl",
+            "text-red-700",
+            "font-semibold",
+            "text-center"
+        );
+
+        notificationContainer.appendChild(message);
+        notificacaoFuncionario.appendChild(notificationContainer);
+        this.notificacoes.push(notificationContainer);
     }
 }
 
+
 class Maquina {
-    
-    constructor(nome,painel){
+    constructor(nome, painel) {
         this.id = idGenerator(),
         this.nome = nome,
         this.temperatura = 60,
@@ -136,23 +193,47 @@ class Maquina {
         this.painel.adicionarMaquina(this)
     }
 
-    addFuncionario(funcionario){
+    addFuncionario(funcionario) {
         this.funcionarios.push(funcionario)
     }
-    atualizar(){
-        this.info = buildElement(this)
-        this.painel.atualizarPainel(this)
-        if(this.temperatura > 100 ){
-            this.notifySubscribers()
+
+    atualizar() {
+        this.info = buildElement(this);
+        this.painel.atualizarPainel(this);
+
+        if (this.temperatura > 100 && this.umidade > 70) {
+            this.notifySubscribers("superaquecida e molhada");
+        }
+        else if(machine.temperatura > 100 && machine.umidade > 50){
+            this.notifySubscribers("superaquecida e umida");
+        }
+        else if(machine.temperatura > 70 && machine.umidade > 70){
+            this.notifySubscribers("aquecida e molhada");
+        }
+        else if (this.temperatura > 100) {
+            this.notifySubscribers("superaquecida");
+        }
+        else if (this.umidade > 70){
+            this.notifySubscribers("molhada");
+        }
+        else if(machine.temperatura > 70 && machine.umidade > 50){
+            this.notifySubscribers("aquecida e umida");
+        }
+        else if (this.umidade > 50) {
+            this.notifySubscribers("umida");
+        } 
+        else if (this.temperatura > 70) {
+            this.notifySubscribers("aquecida");
         }
     }
 
-    notifySubscribers(){
-        this.funcionarios.map((funcionario) =>{
-            funcionario.update(this.id)
-        })
+    notifySubscribers(state) {
+        this.funcionarios.forEach((funcionario) => {
+            funcionario.update(this.id, state);
+        });
     }
 }
+
 
 class Operador extends Funcionario{
 }
@@ -191,14 +272,13 @@ class Painel {
     }
 }
 
-
 p1 = new Painel()
 
 m1 = new Maquina("Maquina1",p1)
 m2 = new Maquina("Maquina2", p1)
 m3 = new Maquina("Maquina3",p1)
 m4 = new Maquina("Maquina3",p1)
-m5 = new Maquina("MAquina5", p1)
+m5 = new Maquina("Maquina5", p1)
 
 op1 = new Operador()
 op2 = new Operador()
@@ -220,5 +300,13 @@ btnTeste.addEventListener("click", () =>{
         machine.atualizar()
 
     })
-    
+})
+
+const botaozadaAdd = document.getElementById("add-machine")
+
+botaozadaAdd.addEventListener("click", () => {
+    id--; // pq eu fiz isso ( ta criando de 2 em 2 trapaça criativa )
+    const newMachine = new Maquina(`Maquina${idGenerator()}`, p1)
+    machines.push(newMachine)
+    console.log(`Total de máquinas criadas: ${id}`);    
 })
