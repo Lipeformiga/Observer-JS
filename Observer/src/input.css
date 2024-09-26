@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.machine-container-green{
+    @apply bg-background2 w-1/4 text-center rounded-lg shadow-customShadow;
+}
+.machine-container-red{
+    @apply bg-background1 w-1/4 text-center rounded-lg shadow-customShadow;
+}
