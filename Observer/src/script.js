@@ -23,16 +23,28 @@ const buildElement = (machine) =>{
     status.classList.add("mb-10")
     status.classList.add("text-xl")
 
-    if(machine.temperatura > 100){
-        status.innerText = "SUPERAQUECIDA"
+    
+    
+    if(machine.temperatura > 100 && machine.umidade > 70){
+        status.innerText = "SUPERAQUECIDA e MOLHADA"
         status.classList.add("text-red-custom") 
     }
-    else{
-        status.innerText ="NORMAL"
-    }        
+    else if (machine.umidade > 70){
+        status.innerText ="MOLHADA"
+        status.classList.add("text-red-custom") 
+    }   
+    else if(machine.temperatura > 100){
+
+    }   
     
-
-
+    if(machine.umidade > 70){
+        status.innerText = "MOLHADA"
+        status.classList.add("text-red-custom")
+    }
+    else{
+        status.innerText = "NORMAL"
+    }
+    
     const title = document.createElement("h2")
 
     title.classList.add("mb-20")
@@ -49,8 +61,6 @@ const buildElement = (machine) =>{
     divContainerStatus.classList.add("mr-28")
     divContainerStatus.classList.add("mb-24")
     
-    
-
     const estado = document.createElement("p");
 
 
@@ -85,7 +95,6 @@ const idGenerator = () => {
    
         id++;
         return id;
-    
 }
 
 class Funcionario{
@@ -102,8 +111,6 @@ class Funcionario{
        this.notificacoes.push(text)
        notificacaoFuncionario.appendChild(text)
     }
-    
-
 }
 
 class Maquina {
@@ -137,8 +144,6 @@ class Maquina {
             funcionario.update(this.id)
         })
     }
-
-
 }
 
 class Operador extends Funcionario{
