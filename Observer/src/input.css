@@ -8,3 +8,6 @@
 .machine-container-red{
     @apply bg-background1 w-1/4 text-center rounded-lg shadow-customShadow;
 }
+.machine-container-yellow{
+    @apply bg-background3 w-1/4 text-center rounded-lg shadow-customShadow;
+}

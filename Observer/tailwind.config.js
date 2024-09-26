@@ -9,7 +9,8 @@ module.exports = {
       },
       backgroundColor:{
         'background1' : '#FFE4E4',
-        'background2' : '#E6FFDE'
+        'background2' : '#E6FFDE',
+        'background3' : '#F7FAD0'
       },
       textColor:{
         'red-custom' : '#CD0000',

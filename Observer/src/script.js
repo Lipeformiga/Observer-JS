@@ -9,14 +9,6 @@ const buildElement = (machine) =>{
 
     const divContainerMachine = document.createElement("div")
 
-    if(machine.temperatura > 100){
-        divContainerMachine.classList.add("machine-container-red")
-        
-    }
-    else{
-        divContainerMachine.classList.add("machine-container-green")
-    }
-
     const status = document.createElement("h2")
 
     status.classList.add("mt-6")
@@ -28,21 +20,37 @@ const buildElement = (machine) =>{
     if(machine.temperatura > 100 && machine.umidade > 70){
         status.innerText = "SUPERAQUECIDA e MOLHADA"
         status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-red")
     }
     else if (machine.umidade > 70){
         status.innerText ="MOLHADA"
-        status.classList.add("text-red-custom") 
+        status.classList.add("text-red-custom")
+        divContainerMachine.classList.add("machine-container-red") 
     }   
     else if(machine.temperatura > 100){
-
-    }   
-    
-    if(machine.umidade > 70){
-        status.innerText = "MOLHADA"
+        status.innerText ="SUPERAQUECIDA"
         status.classList.add("text-red-custom")
+        divContainerMachine.classList.add("machine-container-red") 
     }
+    else if(machine.temperatura > 70 && machine.umidade > 50){
+        status.innerText = "AQUECIDA e MOLHADINHA"
+        status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-yellow")
+    }
+    else if(machine.temperatura > 70){
+        status.innerText = "AQUECiDA"
+        status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-yellow")
+    }
+    else if(machine.umidade > 50){
+        status.innerText = "MOLHADINHA"
+        status.classList.add("text-red-custom") 
+        divContainerMachine.classList.add("machine-container-yellow")
+    }
+
     else{
         status.innerText = "NORMAL"
+        divContainerMachine.classList.add("machine-container-green")
     }
     
     const title = document.createElement("h2")
@@ -214,10 +222,3 @@ btnTeste.addEventListener("click", () =>{
     })
     
 })
-
-
-
-
-
-
-
