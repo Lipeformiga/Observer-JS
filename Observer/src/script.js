@@ -129,41 +129,46 @@ class Funcionario {
 
     update(id, state) {
         const notificationContainer = document.createElement("div");
-        notificationContainer.classList.add(
-            "bg-red-100",
-            "border-l-4",
-            "border-red-500",
-            "p-4",
-            "mb-2",
-            "rounded-lg",
-            "shadow-md",
-            "transition-transform",
-            "duration-300",
-            "transform",
-            "translate-x-0"
-        );
-
+    
+        if (state === "aquecida" || state === "umida" || state === "aquecida e umida") {
+            notificationContainer.classList.add("bg-yellow-100", "border-l-4","border-yellow-500","p-4","mb-2","rounded-lg","shadow-md");
+        } 
+        else {
+            notificationContainer.classList.add("bg-red-100","border-l-4","border-red-500","p-4","mb-2","rounded-lg","shadow-md");
+        }
+    
         const message = document.createElement("p");
         let messageText;
-
+    
         switch (state) {
             case "superaquecida e molhada":
-                messageText = `A máquina de ${id} está superaquecida e molhada!`
-                break
+                messageText = `A máquina ${id} está superaquecida e molhada!`;
+                break;
+            case "superaquecida e umida":
+                messageText = `A máquina ${id} está superaquecida e umida!`;
+                break;
+            case "aquecida e molhada":
+                messageText = `A máquina ${id} está aquecida e molhada!`;
+                break;
             case "superaquecida":
-                messageText = `A máquina de ${id} está superaquecida!`
-                break
+                messageText = `A máquina ${id} está superaquecida!`;
+                break;
             case "aquecida":
-                messageText = `A máquina de ${id} está aquecida!`
-                break
+                messageText = `A máquina ${id} está aquecida!`;
+                break;
             case "umida":
-                messageText = `A máquina de ${id} está úmida!`
-                break
+                messageText = `A máquina ${id} está úmida!`;
+                break;
             case "molhada":
-                messageText = `A máquina de ${id} está molhada!`
-                break
+                messageText = `A máquina ${id} está molhada!`;
+                break;
+            case "aquecida e umida":
+                messageText = `A máquina ${id} está aquecida e umida!`;
+                break;
+            default:
+                messageText = `A máquina ${id} está em estado desconhecido.`;
         }
-
+    
         message.innerText = messageText;
         message.classList.add(
             "text-xl",
@@ -171,11 +176,13 @@ class Funcionario {
             "font-semibold",
             "text-center"
         );
-
+    
         notificationContainer.appendChild(message);
         notificacaoFuncionario.appendChild(notificationContainer);
         this.notificacoes.push(notificationContainer);
     }
+    
+    
 }
 
 
@@ -200,25 +207,25 @@ class Maquina {
     atualizar() {
         this.info = buildElement(this);
         this.painel.atualizarPainel(this);
-
+        
         if (this.temperatura > 100 && this.umidade > 70) {
             this.notifySubscribers("superaquecida e molhada");
-        }
-        else if(machine.temperatura > 100 && machine.umidade > 50){
+        } 
+        else if (this.temperatura > 100 && this.umidade > 50) {
             this.notifySubscribers("superaquecida e umida");
-        }
-        else if(machine.temperatura > 70 && machine.umidade > 70){
+        } 
+        else if (this.temperatura > 70 && this.umidade > 70) {
             this.notifySubscribers("aquecida e molhada");
-        }
+        } 
         else if (this.temperatura > 100) {
             this.notifySubscribers("superaquecida");
-        }
-        else if (this.umidade > 70){
+        } 
+        else if (this.umidade > 70) {
             this.notifySubscribers("molhada");
-        }
-        else if(machine.temperatura > 70 && machine.umidade > 50){
+        } 
+        else if (this.temperatura > 70 && this.umidade > 50) {
             this.notifySubscribers("aquecida e umida");
-        }
+        } 
         else if (this.umidade > 50) {
             this.notifySubscribers("umida");
         } 
@@ -226,6 +233,7 @@ class Maquina {
             this.notifySubscribers("aquecida");
         }
     }
+    
 
     notifySubscribers(state) {
         this.funcionarios.forEach((funcionario) => {
@@ -233,7 +241,6 @@ class Maquina {
         });
     }
 }
-
 
 class Operador extends Funcionario{
 }
@@ -310,3 +317,5 @@ botaozadaAdd.addEventListener("click", () => {
     machines.push(newMachine)
     console.log(`Total de máquinas criadas: ${id}`);    
 })
+
+//singleton para instanciar maquinas iguais e builder para maquinas diferentes
