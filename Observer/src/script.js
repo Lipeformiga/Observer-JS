@@ -4,8 +4,6 @@ const quantidadeMaquinasLabel = document.getElementById("quantidade-maquinas")
 const notificacaoFuncionario = document.getElementById("container-notifications")
 let id = 0
 
-
-
 quantidadeMaquinasLabel.innerText = `0 Maquinas`
 const buildElement = (machine) =>{
 
@@ -278,7 +276,6 @@ class Painel {
         })
     }
 }
-
 p1 = new Painel()
 
 m1 = new Maquina("Maquina1",p1)
@@ -300,7 +297,6 @@ machines.push(m1,m2,m3,m4,m5)
 const btnTeste = document.querySelector("button")
 
 btnTeste.addEventListener("click", () =>{
-
     machines.forEach((machine) => {
         machine.temperatura = Math.floor(Math.random() * 201)
         machine.umidade = Math.floor(Math.random() * 101)
@@ -317,5 +313,3 @@ botaozadaAdd.addEventListener("click", () => {
     machines.push(newMachine)
     console.log(`Total de máquinas criadas: ${id}`);    
 })
-
-//singleton para instanciar maquinas iguais e builder para maquinas diferentes
