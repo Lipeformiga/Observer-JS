@@ -174,13 +174,24 @@ class Funcionario {
             "font-semibold",
             "text-center"
         );
-    
+        
         notificationContainer.appendChild(message);
         notificacaoFuncionario.appendChild(notificationContainer);
         this.notificacoes.push(notificationContainer);
     }
-    
-    
+}
+
+class MaquinaBuilder{
+    constructor(){
+            
+    }
+    addTemp(maquina){
+        maquina.teste = 0;  
+    }
+    addUmidade(maquina){
+        maquina.teste = 0;
+    }
+
 }
 
 
@@ -188,8 +199,8 @@ class Maquina {
     constructor(nome, painel) {
         this.id = idGenerator(),
         this.nome = nome,
-        this.temperatura = 60,
-        this.umidade = 20,
+        this.temperatura = '',
+        this.umidade = '',
         this.ligada = true,
         this.status = "",
         this.funcionarios = [],
@@ -232,7 +243,6 @@ class Maquina {
         }
     }
     
-
     notifySubscribers(state) {
         this.funcionarios.forEach((funcionario) => {
             funcionario.update(this.id, state);
@@ -278,21 +288,32 @@ class Painel {
 }
 p1 = new Painel()
 
-m1 = new Maquina("Maquina1",p1)
-m2 = new Maquina("Maquina2", p1)
-m3 = new Maquina("Maquina3",p1)
-m4 = new Maquina("Maquina3",p1)
-m5 = new Maquina("Maquina5", p1)
+
+const builder = new MaquinaBuilder();
+const m1 = new Maquina("Maquina1", p1);
+const m2 = new Maquina("Maquina2",p1)
+const m3 = new Maquina("Maquina3", p1);
+const m4 = new Maquina("Maquina4",p1)
+builder.addTemp(m1)
+builder.addUmidade(m1)
+builder.addTemp(m2)
+builder.addTemp(m3)
+builder.addUmidade(m3)
+builder.addTemp(m4)
+builder.addUmidade(m4)
+
 
 op1 = new Operador()
 op2 = new Operador()
 
 m1.addFuncionario(op1)
-m2.addFuncionario(op2)
+
 
 const machines = []
 
-machines.push(m1,m2,m3,m4,m5)
+machines.push(m1,m2,m3,m4)
+
+console.log(machines);
 
 const btnTeste = document.querySelector("button")
 
@@ -308,8 +329,7 @@ btnTeste.addEventListener("click", () =>{
 const botaozadaAdd = document.getElementById("add-machine")
 
 botaozadaAdd.addEventListener("click", () => {
-    id--; // pq eu fiz isso ( ta criando de 2 em 2 trapaça criativa )
-    const newMachine = new Maquina(`Maquina${idGenerator()}`, p1)
+    const newMachine = new Maquina(`Maquina`, p1)
     machines.push(newMachine)
     console.log(`Total de máquinas criadas: ${id}`);    
 })
